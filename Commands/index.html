@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commands | RCSO Bot</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#050505',
+                            dark: '#0a0a0a',
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                            glassHover: 'rgba(255, 255, 255, 0.08)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            accent: '#57F287', // PRIMARY GREEN
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(87, 242, 135, 0.07) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #a3a3a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+        .grid-bg {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+        
+        .code-block {
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        .command-icon {
+            color: #57F287;
+        }
+
+        .dropdown-header {
+            cursor: pointer;
+            transition: background-color 0.3s;
+            user-select: none;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .dropdown-header:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding-top: 0;
+        }
+        .dropdown-content.active {
+            max-height: 1000px; /* Large enough to hold all content */
+            padding-top: 1rem;
+        }
+        .rotate-icon {
+            transition: transform 0.3s;
+        }
+        .rotate-icon.active {
+            transform: rotate(90deg);
+        }
+
+        /* --- STYLES FOR CLOSED SECTION 3 --- */
+        .closed-section-hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-accent selection:text-black">
+
+    <!-- Background Grid -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-1]"></div>
+    
+    <!-- Ambient Light -->
+    <div class="ambient-glow top-[-300px] right-[20%] animate-pulse-slow"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-brand-border glass-panel">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-green-800 flex items-center justify-center shadow-lg shadow-brand-accent/20">
+                    <i class="fa-solid fa-shield-halved text-black text-lg"></i>
+                </div>
+                <a href="index.html" class="font-bold text-xl tracking-wide text-white hover:opacity-80 transition-opacity">RCSO Bot <span class="text-gray-500 font-light">by Bluv</span></a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="https://bluv-developer.github.io/RCSO-Bot/About" class="hover:text-white transition-colors">About</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/Updates" class="hover:text-white transition-colors">Updates</a>
+                <!-- Highlighted Commands Link -->
+                <a href="https://bluv-developer.github.io/RCSO-Bot/Commands" class="text-white font-bold transition-colors">Commands</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/How-to-use-sgt" class="hover:text-white transition-colors">Supervisor Guide</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/How-to-use" class="px-5 py-2.5 rounded-full border border-brand-border bg-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white transition-all duration-300">
+                    How to Use
+                </a>
+            </div>
+
+            <button class="md:hidden text-white text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-24 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-gray-500 mb-12 animate-fade-in-up">
+                <a href="https://bluv-developer.github.io/RCSO-Bot/" class="hover:text-brand-accent transition-colors">Home</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <!-- Bold and White Command Link -->
+                <a href="https://bluv-developer.github.io/RCSO-Bot/Commands" class="hover:text-brand-accent transition-colors text-white font-bold">Commands</a>
+            </div>
+
+            <!-- Header -->
+            <div class="text-center mb-16 space-y-6 animate-fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-bold">
+                    The Command <span class="text-gradient">List</span>
+                </h1>
+                <p class="text-gray-400 text-lg max-w-4xl mx-auto leading-relaxed">
+                    This is your complete reference guide for using the RCSO Bot. We focus on making the system super sleek and easy. Below you'll find detailed explanations for every available command, organized by feature category.
+                </p>
+            </div>
+            
+            <!-- Feature Overview -->
+            <section class="glass-card p-8 rounded-2xl mb-12 animate-fade-in-up">
+                <h2 class="text-3xl font-bold text-white mb-4">Comprehensive Feature Overview</h2>
+                <p class="text-gray-400 mb-6">
+                    The RCSO Bot is designed to be the administrative backbone of your department. It seamlessly manages time, finances, and personnel records, ensuring accuracy and freeing up command staff to focus on leadership and training. Our core features include:
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 rounded-lg bg-brand-accent/10 text-brand-accent"><i class="fa-solid fa-hourglass-start mr-2"></i> Automated Shift Logging</div>
+                    <div class="p-3 rounded-lg bg-brand-accent/10 text-brand-accent"><i class="fa-solid fa-file-signature mr-2"></i> Modal Reporting (Tickets/Arrests)</div>
+                    <!-- Hidden Feature Box -->
+                    <div class="closed-section-hidden"></div>
+                    <div class="p-3 rounded-lg bg-brand-accent/10 text-brand-accent"><i class="fa-solid fa-graduation-cap mr-2"></i> FTO & Training Management</div>
+                </div>
+            </section>
+
+            <!-- Command Categories (Now using Dropdowns within glass boxes) -->
+            <div class="space-y-6">
+
+                <!-- 1. Shift Management & Activity -->
+                <div class="glass-card rounded-2xl border-l-4 border-brand-accent/50 animate-fade-in-up">
+                    <div id="dropdown-header-1" onclick="toggleDropdown(1)" class="dropdown-header p-6 rounded-t-2xl flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-brand-accent flex items-center gap-3">
+                            <i class="fa-solid fa-clock command-icon text-3xl"></i> 1. Shift Management & Activity
+                        </h2>
+                        <i id="dropdown-icon-1" class="fa-solid fa-chevron-right rotate-icon text-gray-400"></i>
+                    </div>
+                    <div id="dropdown-content-1" class="dropdown-content p-6">
+                        <p class="text-gray-400 mb-6">
+                            These commands are your daily tools for managing duty status. Using them ensures your time is accurately tracked for pay and promotion eligibility.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/shift_panel</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: The central and easy way to manage your duty status. This command brings up an interactive button panel where you click "START SHIFT (10-8)" or "END SHIFT (10-7)". Starting a shift automatically applies the ON_DUTY role and opens a private log thread for your reference.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A button panel with a current time stamp and status confirmation.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/status_update [new_status]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Quickly log changes in your activity status during your shift (e.g., stopping a pursuit, going 10-6, vehicle maintenance). This command sends a message to your shift thread, keeping your log detailed without manual typing.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Usage Example: <code class="bg-gray-700/50 px-1 rounded">/status_update 10-6 break for 15 mins</code></p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A simple confirmation message that your status has been logged in the shift thread.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Reporting & Records -->
+                <div class="glass-card rounded-2xl border-l-4 border-brand-accent/50 animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <div id="dropdown-header-2" onclick="toggleDropdown(2)" class="dropdown-header p-6 rounded-t-2xl flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-brand-accent flex items-center gap-3">
+                            <i class="fa-solid fa-file-invoice command-icon text-3xl"></i> 2. Reporting & Records
+                        </h2>
+                        <i id="dropdown-icon-2" class="fa-solid fa-chevron-right rotate-icon text-gray-400"></i>
+                    </div>
+                    <div id="dropdown-content-2" class="dropdown-content p-6">
+                        <p class="text-gray-400 mb-6">
+                            These commands are critical for logging formal police actions. They all use simple pop-up forms (modals) to make data entry fast and structured, ensuring every event is tracked.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/report_panel</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Opens an interactive panel that lets you choose which type of report you want to file (Arrest, Citation, Incident). Each selection launches the correct modal form.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A button panel listing all report types.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/arrest_log (via panel)</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Generates a full arrest report (Booking). The modal requires fields like Suspect Name, Charges, and a detailed Narrative. The submitted report is logged to the RECORDS channel and requires supervisor approval via buttons.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A clean embed summary of the arrest details, tagged with a unique case number.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/citation_log (via panel)</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Logs traffic citations, warnings, or vehicle equipment orders. The form ensures consistency in reporting vehicle/driver information and violation codes. This process eliminates paper forms entirely.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A formatted embed showing the ticket number and violation summary.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/incident_report (via panel)</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: For logging non-arrest, non-citation events, such as high-speed pursuits, property damage, or officer-involved incidents that need documentation for internal review.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: An embed confirming the report submission and listing the assigned report number.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. FTO & Training -->
+                <div class="glass-card rounded-2xl border-l-4 border-brand-accent/50 animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <div id="dropdown-header-3" onclick="toggleDropdown(3)" class="dropdown-header p-6 rounded-t-2xl flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-brand-accent flex items-center gap-3">
+                            <i class="fa-solid fa-graduation-cap command-icon text-3xl"></i> 3. FTO & Training
+                        </h2>
+                        <i id="dropdown-icon-3" class="fa-solid fa-chevron-right rotate-icon text-gray-400"></i>
+                    </div>
+                    <div id="dropdown-content-3" class="dropdown-content p-6">
+                        <p class="text-gray-400 mb-6">
+                            These tools are essential for the Field Training Officer (FTO) program, simplifying session logging and tracking cadet progress.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/training_panel</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Opens an instructor panel with buttons to start a new training session or access controls like sending results or canceling the session.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A button panel for instructors/hosts.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/start_session (via panel)</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Initializes a new training session. The bot begins monitoring the voice channel time and detects if the FTO or Cadet goes deaf/mute to ensure accurate logging of active training minutes. This ensures fair tracking of training time.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A confirmation embed showing the session start time and monitoring status.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/log_training (via panel)</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Formalizes the completion of a specific training block or academy course, logging the result (Pass, Fail, Remedial) into the cadet's permanent record. This is vital for progression checks.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A private confirmation that the training has been recorded in the cadet's file.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/view_cadet_profile [cadet]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Pulls up a quick, clean summary of a cadet's performance metrics, total training hours, and previous evaluation results, useful for FTOs and Command staff.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A detailed, multi-field embed displaying all relevant cadet stats.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Economy & Payroll (CLOSED SECTION - Hidden from view) -->
+                <div class="closed-section-hidden">
+                    <div class="glass-card rounded-2xl border-l-4 border-gray-700/50 relative overflow-hidden">
+                        
+                        <div class="p-6 rounded-t-2xl flex justify-between items-center opacity-20 cursor-default unselectable">
+                            <h2 class="text-2xl font-bold text-brand-accent flex items-center gap-3">
+                                <i class="fa-solid fa-coins command-icon text-3xl"></i> 4. Economy & Payroll
+                            </h2>
+                            <i class="fa-solid fa-lock text-gray-400"></i>
+                        </div>
+                        
+                        <div class="p-6 closed-section-content unselectable"> 
+                            <p class="text-gray-400 mb-6">
+                                Manage your in-game paychecks and funds. Pay is automatically calculated based on your shift time. Note that command staff manage the primary payroll functions (see Supervisor Guide for those commands).
+                            </p>
+                            <div class="space-y-4">
+                                <div class="code-block">
+                                    <code class="font-mono text-brand-accent">/balance</code>
+                                    <p class="text-gray-400 text-sm mt-2">Purpose: Displays your current currency balance, along with an overview of pending pay (hours worked since last paycheck) and your current pay rate ($150/hr).</p>
+                                    <p class="text-gray-500 text-xs mt-1 italic">Message Content: A private ephemeral message displaying the balance details.</p>
+                                </div>
+                                <div class="code-block">
+                                    <code class="font-mono text-brand-accent">/transfer [user] [amount]</code>
+                                    <p class="text-gray-400 text-sm mt-2">Purpose: Allows you to securely transfer currency to another department member for things like gear sales, reimbursement, or fines. The system requires a confirmation step to prevent accidental transfers.</p>
+                                    <p class="text-gray-500 text-xs mt-1 italic">Message Content: A confirmation button appears, followed by a public success announcement in the channel.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Disciplinary & Personnel (Sgt+ Only) -->
+                <div class="glass-card rounded-2xl border-l-4 border-brand-accent/50 animate-fade-in-up" style="animation-delay: 0.4s;">
+                    <div id="dropdown-header-5" onclick="toggleDropdown(5)" class="dropdown-header p-6 rounded-t-2xl flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-brand-accent flex items-center gap-3">
+                            <i class="fa-solid fa-gavel command-icon text-3xl"></i> 4. Disciplinary & Personnel (Sgt+ Only)
+                        </h2>
+                        <i id="dropdown-icon-5" class="fa-solid fa-chevron-right rotate-icon text-gray-400"></i>
+                    </div>
+                    <div id="dropdown-content-5" class="dropdown-content p-6">
+                        <p class="text-gray-400 mb-6">
+                            These sensitive commands are restricted to command staff (Sergeant+) to manage personnel status and implement disciplinary measures fairly and transparently.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/suspend [user] [reason]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Suspends an officer for 3 days by default (as coded in the bot). Automatically applies the SUSPENDED role, logs the action, and sets a timed restoration. This command handles all role management automatically.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Usage Example: <code class="bg-gray-700/50 px-1 rounded">/suspend @OfficerJohn Failed probation period</code> (Note: The days parameter is hardcoded to 3 days in the bot for consistency).</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A public embed confirms the suspension and includes an undo button for staff use.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/discharge [user] [reason]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Executes a formal discharge. This command removes all previous department roles, applies the DISCHARGED role for a 24-hour hold, logs the action permanently, and notifies the relevant command channel for audit purposes.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A public embed confirming the discharge and includes an undo button for staff use.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/infraction [user] [reason]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Logs a minor infraction or a verbal warning into the user's personnel file without immediately changing their roles or status. Used for keeping detailed, non-critical personnel history.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: A private confirmation that the infraction was logged to the user's file.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/promote [member] [rank]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Manually promotes a member to the specified rank role. Restricted to Administrators.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: Confirmation in the dedicated PROMOTION channel.</p>
+                            </div>
+                            <div class="code-block">
+                                <code class="font-mono text-brand-accent">/demote [member] [rank]</code>
+                                <p class="text-gray-400 text-sm mt-2">Purpose: Manually removes the specified rank role from a member. Restricted to Administrators.</p>
+                                <p class="text-gray-500 text-xs mt-1 italic">Message Content: Confirmation in the dedicated DEMOTION channel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-black">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-accent/20 flex items-center justify-center">
+                    <i class="fa-solid fa-code text-brand-accent text-xs"></i>
+                </div>
+                <span class="text-gray-400 font-mono text-sm">Powered By Bluv</span>
+            </div>
+            <div class="text-gray-600 text-sm">
+                &copy; 2025-2026 RCSO Development. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDropdown(id) {
+            const content = document.getElementById(`dropdown-content-${id}`);
+            const icon = document.getElementById(`dropdown-icon-${id}`);
+            
+            // Note: Section 4 (Economy) is now hidden in HTML; we do not try to toggle it.
+            
+            // Toggle visibility class
+            const isActive = content.classList.toggle('active');
+            icon.classList.toggle('active');
+
+            // Adjust maxHeight for smooth transition
+            if (isActive) {
+                // Set height to scrollHeight for expansion
+                content.style.maxHeight = content.scrollHeight + 32 + "px"; 
+            } else {
+                content.style.maxHeight = '0';
+            }
+        }
+        
+        // This function forces the dropdown to recalculate height based on content size.
+        // It's attached to the window resize event to prevent layout bugs.
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.dropdown-content.active').forEach(content => {
+                // Temporarily disable transition
+                content.style.transition = 'none';
+                // Reset maxHeight to auto, then measure and reapply scrollHeight
+                content.style.maxHeight = 'auto';
+                content.style.maxHeight = content.scrollHeight + 32 + "px";
+                // Re-enable transition after a small delay
+                setTimeout(() => {
+                    content.style.transition = 'max-height 0.4s ease-out';
+                }, 50);
+            });
+        });
+
+        // Initialize intersection observer for fade-in effect
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.glass-card').forEach((el) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
