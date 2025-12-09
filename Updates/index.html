@@ -179,51 +179,55 @@
             <!-- New Update Block -->
             <div class="space-y-10">
                 
-                <div class="update-entry p-8 rounded-lg shadow-xl glass-card animate-fade-in-up">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-3">
+                <div class="update-entry p-10 rounded-lg shadow-xl glass-card animate-fade-in-up">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                         <h2 class="text-3xl md:text-4xl font-bold text-brand-accent flex items-center flex-wrap gap-3">
-                            <i class="fa-solid fa-bullhorn text-2xl animate-pulse"></i>
-                            Version 1.0.0: Official Launch!
                             <span class="bg-brand-accent text-black text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wider shadow-lg shadow-brand-accent/20">NEW!</span>
+                            Version 1.0.0: Official Launch!
                         </h2>
                         <span class="text-sm text-gray-500 font-mono flex items-center gap-2">
-                            <i class="fa-regular fa-calendar"></i> Released: Dec 9, 2025
+                            <i class="fa-regular fa-calendar"></i> Dec 9, 2025
                         </span>
                     </div>
                     
-                    <p class="text-gray-300 mb-6 leading-relaxed">
-                        We are thrilled to announce the official launch of the RCSO Bot bringing a full suite of automated administrative and field tools online Version 1.0.0 includes all core functionality necessary to manage officer status records and training ensuring smooth and professional operations for the entire department from day one
+                    <p class="text-gray-300 mb-8 leading-relaxed">
+                        We are thrilled to announce the official launch of the RCSO Bot bringing a full suite of automated administrative and field tools online Version 1.0.0 includes all core functionality necessary to manage officer status records and training, ensuring smooth and professional operations for the entire department from day one
                     </p>
 
-                    <div class="space-y-6">
+                    <div class="space-y-8">
                         <!-- Feature Group 1: Shift Management -->
-                        <div class="border-t border-gray-700 pt-4">
-                            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-hourglass-start text-lg"></i> Automated Shift Management</h3>
-                            <ul class="list-disc list-inside ml-4 text-sm text-gray-400 space-y-2">
-                                <li><strong class="text-white">10-8 / 10-7 Controls</strong> Officers use the interactive <code class="bg-gray-700/50 px-1 rounded text-xs text-brand-accent">/shift_panel</code> to clock in and out This function is essential and manages the On Duty role while immediately starting the internal time tracker and logging the start time The system validates the current shift status preventing errors from double clock ins or missing clock outs and ensuring clean data for all personnel</li>
+                        <div class="border-t border-gray-700 pt-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-hourglass-start text-lg"></i> Automated Shift Management</h3>
+                            <ul class="list-disc list-inside ml-4 text-base text-gray-400 space-y-3">
+                                <li><strong class="text-white">10-8 / 10-7 Controls</strong> Officers use the interactive <code class="bg-gray-700/50 px-1 rounded text-sm text-brand-accent">/shift_panel</code> to clock in and out This function is essential and manages the On Duty role while immediately starting the internal time tracker and logging the start time The system validates the current shift status preventing errors from double clock ins or missing clock outs and ensuring clean data for all personnel</li>
                                 <li><strong class="text-white">Automatic Logging</strong> Time is accurately tracked and recorded using the robust internal database Promotion points are calculated based precisely on duty hours worked and are automatically awarded immediately upon clock out (10-7) Officers receive instant feedback on their session duration and points earned aiding in performance management</li>
-                                <li><strong class="text-white">Threaded Logs</strong> Every single shift initiated gets a private log thread automatically created for recording activity This thread is accessible only to the officer and authorized command staff Officers can log detailed status changes and major events via <code class="bg-gray-700/50 px-1 rounded text-xs text-brand-accent">/status_update</code> ensuring detailed records without cluttering main channels or losing critical data The thread is locked upon shift end preventing unauthorized modifications and securing the record</li>
+                                <li><strong class="text-white">Threaded Logs</strong> Every single shift initiated gets a private log thread automatically created for recording activity This thread is accessible only to the officer and authorized command staff Officers can log detailed status changes and major events via <code class="bg-gray-700/50 px-1 rounded text-sm text-brand-accent">/status_update</code> ensuring detailed records without cluttering main channels or losing critical data The thread is locked upon shift end preventing unauthorized modifications and securing the record</li>
                             </ul>
                         </div>
 
                         <!-- Feature Group 2: Reporting Suite -->
-                        <div class="border-t border-gray-700 pt-4">
-                            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-file-invoice text-lg"></i> Field Reporting Suite</h3>
-                            <ul class="list-disc list-inside ml-4 text-sm text-gray-400 space-y-2">
-                                <li><strong class="text-white">Modal Forms</strong> The bot utilizes the <code class="bg-gray-700/50 px-1 rounded text-xs text-brand-accent">/report_panel</code> command which triggers instant pop up modals for clear and structured input This comprehensive system supports filing detailed Arrests (Booking) Citations and Incident Reports ensuring all documentation is standardized and complete eliminating typical formatting errors</li>
+                        <div class="border-t border-gray-700 pt-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-file-invoice text-lg"></i> Field Reporting Suite</h3>
+                            <ul class="list-disc list-inside ml-4 text-base text-gray-400 space-y-3">
+                                <li><strong class="text-white">Modal Forms</strong> The bot utilizes the <code class="bg-gray-700/50 px-1 rounded text-sm text-brand-accent">/report_panel</code> command which triggers instant pop up modals for clear and structured input This comprehensive system supports filing detailed Arrests (Booking) Citations and Incident Reports ensuring all documentation is standardized and complete eliminating typical formatting errors</li>
                                 <li><strong class="text-white">Supervisor Workflow</strong> All reports submitted by officers require mandatory supervisor review and approval to become official records Supervisors use interactive buttons (APPROVE/DENY) that appear directly within the reporting thread in the RECORDS channel to finalize the records and complete the workflow Approval of Booking reports automatically triggers a separate log to the JAIL_LOG channel ensuring immediate notification to jail staff</li>
                             </ul>
                         </div>
                         
                         <!-- Feature Group 3: Personnel and Training -->
-                        <div class="border-t border-gray-700 pt-4">
-                            <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2"><i class="fa-solid fa-user-shield text-lg"></i> Personnel and Training Tools</h3>
-                            <ul class="list-disc list-inside ml-4 text-sm text-gray-400 space-y-2">
+                        <div class="border-t border-gray-700 pt-6">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-user-shield text-lg"></i> Personnel and Training Tools</h3>
+                            <ul class="list-disc list-inside ml-4 text-base text-gray-400 space-y-3">
                                 <li><strong class="text-white">Disciplinary</strong> The system automates disciplinary actions ensuring consistency across the department This includes timed suspension (fixed at 3 days) and discharge actions (24 hour role hold) with instant logging and role management Both major actions come with a vital UNDO feature for immediate correction by authorized command staff reducing the risk of permanent administrative errors</li>
                                 <li><strong class="text-white">FTO Monitoring</strong> The bot uses smart voice activity tracking in the dedicated TRAINING_VC The system automatically pauses the training timer if the FTO or trainee mutes or deafens their mic guaranteeing accurate tracking of only active training time Logs are sent to the FTO_LOG channel automatically upon session end providing transparent auditing of training duration</li>
-                                <li><strong class="text-white">Instructor Tools</strong> The <code class="bg-gray-700/50 px-1 rounded text-xs text-brand-accent">/training_panel</code> is available for hosts to easily manage sessions announce training and formally log final session results (Pass/Fail/Remedial) for accurate and auditable record keeping Trainees can check their progress via <code class="bg-gray-700/50 px-1 rounded text-xs text-brand-accent">/view_cadet_profile</code> at any time to monitor their status</li>
+                                <li><strong class="text-white">Instructor Tools</strong> The <code class="bg-gray-700/50 px-1 rounded text-sm text-brand-accent">/training_panel</code> is available for hosts to easily manage sessions announce training and formally log final session results (Pass/Fail/Remedial) for accurate and auditable record keeping Trainees can check their progress via <code class="bg-gray-700/50 px-1 rounded text-sm text-brand-accent">/view_cadet_profile</code> at any time to monitor their status</li>
                             </ul>
                         </div>
+                    </div>
+
+                    <!-- Signature Line -->
+                    <div class="border-t border-gray-700 pt-6 mt-8 text-sm text-gray-400 flex justify-center">
+                        <strong class="text-white">Signed, Bluv</strong>
                     </div>
                 </div>
 
@@ -240,8 +244,8 @@
                 </div>
                 <span class="text-gray-400 font-mono text-sm">Powered By Bluv</span>
             </div>
-            <div class="text-gray-600 text-sm">
-                &copy; 2025-2026 RCSO Development All rights reserved
+            <div class="text-gray-600 text-sm flex flex-col items-end">
+                <span>&copy; 2025-2026 RCSO Development All rights reserved</span>
             </div>
         </div>
     </footer>
