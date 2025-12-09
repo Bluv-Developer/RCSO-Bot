@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use | RCSO Bot</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#050505',
+                            dark: '#0a0a0a',
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                            glassHover: 'rgba(255, 255, 255, 0.08)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            accent: '#57F287', // PRIMARY GREEN
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(87, 242, 135, 0.07) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-box {
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            background-color: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .section-title {
+            color: #57F287;
+            border-bottom: 2px solid #57F287;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #a3a3a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Command Styling (Clean, non-boxed) */
+        .cmd {
+            color: #57F287; 
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0 4px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        /* Procedural Lists */
+        .procedure-list {
+            list-style: none;
+            padding-left: 0;
+            counter-reset: li;
+        }
+        .procedure-list > li {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+        .procedure-list > li:before {
+            content: counter(li);
+            counter-increment: li;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #000;
+            background-color: #57F287;
+            border-radius: 50%;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-accent selection:text-black">
+
+    <!-- Background Grid -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-1]"></div>
+    
+    <!-- Ambient Light -->
+    <div class="ambient-glow top-[-300px] right-[20%] animate-pulse-slow"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-brand-border glass-panel">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-accent to-green-800 flex items-center justify-center shadow-lg shadow-brand-accent/20">
+                    <i class="fa-solid fa-shield-halved text-black text-lg"></i>
+                </div>
+                <a href="index.html" class="font-bold text-xl tracking-wide text-white hover:opacity-80 transition-opacity">RCSO Bot <span class="text-gray-500 font-light">by Bluv</span></a>
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <a href="https://bluv-developer.github.io/RCSO-Bot/About" class="hover:text-white transition-colors">About</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/Updates" class="hover:text-white transition-colors">Updates</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/Commands" class="hover:text-white transition-colors">Commands</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/How-to-use-sgt" class="hover:text-white transition-colors">Supervisor Guide</a>
+                <a href="https://bluv-developer.github.io/RCSO-Bot/How-to-use" class="text-white font-bold transition-colors">How to Use</a>
+            </div>
+
+            <button class="md:hidden text-white text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-24 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-gray-500 mb-12 animate-fade-in-up">
+                <a href="https://bluv-developer.github.io/RCSO-Bot/" class="hover:text-brand-accent transition-colors">Home</a>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+                <span class="text-white font-bold">How to Use</span>
+            </div>
+
+            <!-- Header -->
+            <div class="text-center mb-16 space-y-6 animate-fade-in-up">
+                <h1 class="text-5xl md:text-6xl font-bold">
+                    Your Field Operations <span class="text-gradient">Quickstart</span>
+                </h1>
+                <p class="text-gray-400 text-lg max-w-4xl mx-auto leading-relaxed">
+                    Welcome to the RCSO Bot operations guide! Using the bot is designed to be super easy, letting you focus on the action. Think of this as your quick training manual for core daily tasks, no complex jargon, just smooth operations.
+                </p>
+            </div>
+            
+            <!-- Detailed Procedures -->
+            <div class="space-y-12">
+
+                <!-- Section I: Starting and Ending Your Shift (10-8 / 10-7) -->
+                <section class="section-box animate-fade-in-up">
+                    <h2 class="3xl font-bold section-title flex items-center gap-3">
+                        <i class="fa-solid fa-clock command-icon"></i> I. Clocking In and Out (10-8 and 10-7)
+                    </h2>
+                    <p class="text-gray-400 mb-6">
+                        This is the most important step! Starting and ending your shift correctly ensures your time is logged for payroll and promotion points.
+                    </p>
+                    
+                    <ol class="procedure-list ml-4">
+                        <li class="text-white">
+                            <p class="text-lg font-medium text-brand-accent mb-1">Begin Your Shift (10-8)</p>
+                            <p class="text-gray-400 text-sm">
+                                To start your duty, type the command <span class="cmd">/shift_panel</span> into any channel. The bot will present an interactive panel. Click the START SHIFT (10-8) button. The system automatically gives you the On Duty role, starts your timer, and creates a private log thread for your reference.
+                            </p>
+                        </li>
+                        <li class="text-white">
+                            <p class="text-lg font-medium text-brand-accent mb-1">Update Your Status During Duty</p>
+                            <p class="text-gray-400 text-sm">
+                                If you need to log a major event or take a break, use the command <span class="cmd">/status_update</span> followed by a short note (for example, <span class="cmd">/status_update 10-6 break for lunch</span>). This action records the time and reason in your private shift log thread, keeping your record clean.
+                            </p>
+                        </li>
+                        <li class="text-white">
+                            <p class="text-lg font-medium text-brand-accent mb-1">Ending Your Shift (10-7)</p>
+                            <p class="text-gray-400 text-sm">
+                                When your shift is complete, use the <span class="cmd">/shift_panel</span> command again. Click the END SHIFT (10-7) button. The system stops your timer, removes your On Duty role, calculates your total time and promotion points earned, and locks your shift log thread.
+                            </p>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- Section II: Filing Official Reports (Arrests, Citations, Incidents) -->
+                <section class="section-box animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <h2 class="3xl font-bold section-title flex items-center gap-3">
+                        <i class="fa-solid fa-file-invoice command-icon"></i> II. Submitting Official Reports
+                    </h2>
+                    <p class="text-gray-400 mb-6">
+                        The bot makes filing reports easy using pop up forms (modals) instead of complicated text entries.
+                    </p>
+                    
+                    <ol class="procedure-list ml-4">
+                        <li class="text-white">
+                            <p class="lg font-medium text-brand-accent mb-1">Access the Reporting Hub</p>
+                            <p class="text-gray-400 text-sm">
+                                To begin any report, simply type <span class="cmd">/report_panel</span>. This displays an interactive panel with buttons for all report types: Arrest/Booking, Citation, or Incident Report.
+                            </p>
+                        </li>
+                        <li class="text-white">
+                            <p class="lg font-medium text-brand-accent mb-1">Filling Out the Modal Form</p>
+                            <p class="text-gray-400 text-sm">
+                                Select the report type (for example, Arrest). A clean, separate pop up window will appear on your screen. Enter all required details, such as suspect name, vehicle, charges, and the narrative. Use clear, objective language in your description.
+                            </p>
+                        </li>
+                        <li class="text-white">
+                            <p class="lg font-medium text-brand-accent mb-1">Submission and Supervisor Review</p>
+                            <p class="text-gray-400 text-sm">
+                                Once submitted, the report is automatically logged in the RECORDS channel and a thread is opened for supervisor review. No further action is required from you unless a supervisor contacts you to request a correction or resubmission.
+                            </p>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- Section III: Training and FTO Status -->
+                <section class="section-box animate-fade-in-up" style="animation-delay: 0.2s;">
+                    <h2 class="3xl font-bold section-title flex items-center gap-3">
+                        <i class="fa-solid fa-graduation-cap command-icon"></i> III. Training and FTO Status
+                    </h2>
+                    <p class="text-gray-400 mb-6">
+                        If you are a Trainee, the bot keeps track of your hours and records your progress.
+                    </p>
+                    
+                    <ol class="procedure-list ml-4">
+                        <li class="text-white">
+                            <p class="lg font-medium text-brand-accent mb-1">Starting a Training Session</p>
+                            <p class="text-gray-400 text-sm">
+                                You do not start the timer! The FTO (Field Training Officer) or Instructor uses the <span class="cmd">/training_panel</span> to begin the session. Simply join the dedicated TRAINING_VC voice channel when instructed. The bot automatically logs your active time, pausing if you mute or deafen.
+                            </p>
+                        </li>
+                        <li class="text-white">
+                            <p class="lg font-medium text-brand-accent mb-1">Checking Your Progress</p>
+                            <p class="text-gray-400 text-sm">
+                                You can view your overall training records and hours logged by using the command <span class="cmd">/view_cadet_profile [Your Name]</span>. This is helpful for monitoring your progress toward certification.
+                            </p>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- Section IV: Pro Tips & Helpful Hints -->
+                <section class="section-box animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <h2 class="3xl font-bold section-title flex items-center gap-3">
+                        <i class="fa-solid fa-lightbulb command-icon"></i> IV. Pro Tips and Helpful Hints
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="text-white">
+                            <h3 class="xl font-medium text-brand-accent mb-1">Tip: Command Shortcuts</h3>
+                            <p class="text-gray-400 text-sm">
+                                Do not type the full command! Once you type the slash <span class="cmd">/</span>, a menu pops up. Just start typing the name (for example, "shif" for <span class="cmd">/shift_panel</span>) and select it from the list. It is much faster than typing everything out.
+                            </p>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="xl font-medium text-brand-accent mb-1">Tip: Keep Your Status Fresh</h3>
+                            <p class="text-gray-400 text-sm">
+                                When using <span class="cmd">/status_update</span>, be specific. Instead of just "10-6," try "10-6 vehicle maintenance." Detailed logs look professional and help command staff understand your activity at a glance.
+                            </p>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="xl font-medium text-brand-accent mb-1">Tip: When in Doubt, Check the Manual</h3>
+                            <p class="text-gray-400 text-sm">
+                                If you are ever unsure about a command or a procedure, the full <span class="cmd">/commands</span> list has descriptions of every single function, even the administrative ones. You have just joined an exclusive club of capable, confident pros!
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 bg-black">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-accent/20 flex items-center justify-center">
+                    <i class="fa-solid fa-code text-brand-accent text-xs"></i>
+                </div>
+                <span class="text-gray-400 font-mono text-sm">Powered By Bluv</span>
+            </div>
+            <div class="text-gray-600 text-sm">
+                &copy; 2025-2026 RCSO Development. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer for fade-ins
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section-box').forEach((el) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
