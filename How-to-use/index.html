@@ -136,6 +136,14 @@
             border-radius: 50%;
         }
         
+        /* Grid Background for visual appeal */
+        .grid-bg {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+        
         /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050505; }
@@ -148,7 +156,7 @@
 
     <!-- Background Grid -->
     <div class="fixed inset-0 grid-bg pointer-events-none z-[-1]"></div>
-    
+
     <!-- Ambient Light -->
     <div class="ambient-glow top-[-300px] right-[20%] animate-pulse-slow"></div>
 
